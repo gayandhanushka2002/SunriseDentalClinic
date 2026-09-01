@@ -17,6 +17,7 @@ public class MainDashboardUI extends javax.swing.JFrame {
      */
     public MainDashboardUI() {
         initComponents();
+        this.setLocationRelativeTo(null); // for get ui to middle 
     }
 
     /**
