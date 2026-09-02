@@ -4,6 +4,15 @@
  */
 package view;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+
 /**
  *
  * @author Gayan
@@ -262,61 +271,87 @@ public class ManageBillUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenerateActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        // TODO add your handling code here:
-        
-        
-     // Generate a random bill number
+       // Generate a random bill number
         String generatedBillNo = "B" + (int)(Math.random() * 10000);
 
-        // Save bill to the database first
+        // 1. Save bill to the database first
         boolean isSaved = saveBill(generatedBillNo, selectedApptNo, calculatedTotal);
 
         if (isSaved) {
-            
-            // NEW: Get current date and time
             String currentDate = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            // NEW: Build the beautiful bill format
-            StringBuilder billContent = new StringBuilder();
-            billContent.append("======================================\n");
-            billContent.append("        SUNRISE DENTAL CLINIC         \n");
-            billContent.append("======================================\n");
-            billContent.append("Date & Time : ").append(currentDate).append("\n");
-            billContent.append("Bill No     : ").append(generatedBillNo).append("\n"); 
-            billContent.append("Appt No     : ").append(selectedApptNo).append("\n");
-            
-            // Add Doctor's Name to the bill
-            billContent.append("Doctor Name : ").append(selectedDoctorName).append("\n");
-            
-            billContent.append("--------------------------------------\n");
-            billContent.append("Consultation Fee: Rs. ").append(currentConsultationFee).append("\n");
-            billContent.append("Booking Fee     : Rs. ").append(BOOKING_FEE).append("\n");
+            try {
+                // 2. PDF save name and location eg B1234_Invoice.pdf
+                String filePath = generatedBillNo + "_Invoice.pdf";
+                Document document = new Document();
+                PdfWriter.getInstance(document, new FileOutputStream(filePath));
 
-            if (currentTreatmentFee > 0) {
-                String desc = currentTreatmentDesc.isEmpty() ? "Medical Treatment" : currentTreatmentDesc;
-                billContent.append("Treatment (").append(desc).append("): Rs. ").append(currentTreatmentFee).append("\n");
+                // open document and writing
+                document.open();
+
+                // 3. genarate fonts
+                Font titleFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD);
+                Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
+                Font boldFont = new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD);
+
+                // 4. PDF details
+                Paragraph title = new Paragraph("SUNRISE DENTAL CLINIC", titleFont);
+                title.setAlignment(Element.ALIGN_CENTER); // center
+                document.add(title);
+                
+                Paragraph subTitle = new Paragraph("Official Payment Receipt\n\n", normalFont);
+                subTitle.setAlignment(Element.ALIGN_CENTER);
+                document.add(subTitle);
+
+                document.add(new Paragraph("Date & Time : " + currentDate, normalFont));
+                document.add(new Paragraph("Bill No     : " + generatedBillNo, normalFont));
+                document.add(new Paragraph("Appt No     : " + selectedApptNo, normalFont));
+                document.add(new Paragraph("Doctor Name : " + selectedDoctorName, normalFont));
+                document.add(new Paragraph("-----------------------------------------------------------------------------------------", normalFont));
+
+                document.add(new Paragraph("Consultation Fee : Rs. " + currentConsultationFee, normalFont));
+                document.add(new Paragraph("Booking Fee      : Rs. " + BOOKING_FEE, normalFont));
+
+                if (currentTreatmentFee > 0) {
+                    String desc = currentTreatmentDesc.isEmpty() ? "Medical Treatment" : currentTreatmentDesc;
+                    document.add(new Paragraph("Treatment (" + desc + ") : Rs. " + currentTreatmentFee, normalFont));
+                }
+
+                document.add(new Paragraph("-----------------------------------------------------------------------------------------", normalFont));
+                
+                Paragraph total = new Paragraph("TOTAL COST       : Rs. " + calculatedTotal, boldFont);
+                document.add(total);
+                document.add(new Paragraph("==========================================================", normalFont));
+                
+                Paragraph footer = new Paragraph("\nThank you! Wish you well!\n-- Hotline : 011 5347538 --", normalFont);
+                footer.setAlignment(Element.ALIGN_CENTER);
+                document.add(footer);
+
+                // save as Document and close it
+                document.close();
+
+                // 5. display Success Message 
+                javax.swing.JOptionPane.showMessageDialog(this, "Bill Saved & PDF Generated Successfully!", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                btnPrint.setEnabled(false); 
+
+                // 6. PDF open popup (AUTO OPEN)
+                File pdfFile = new File(filePath);
+                if (pdfFile.exists()) {
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile); // open as a pdf
+                    } else {
+                        System.out.println("Desktop is not supported. Cannot auto-open the PDF.");
+                    }
+                }
+
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error generating PDF: " + e.getMessage(), "PDF Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
             }
-
-            billContent.append("--------------------------------------\n");
-            billContent.append("TOTAL COST      : Rs. ").append(calculatedTotal).append("\n");
-            billContent.append("======================================\n");
-            billContent.append("      Thank you! Wish you well!       \n");
-            billContent.append("======================================\n");
-            billContent.append("-- Hotline : 011 5347538 --\n");
-
-            // Keep the old system working (Terminal print / DB logic)
-            billController.printBill(billContent.toString());
-            
-            // NEW: Save the bill as a .txt file using PrinterSpooler
-            util.PrinterSpooler.getInstance().printReceipt(generatedBillNo, billContent.toString());
-
-            // Show Success Message
-            javax.swing.JOptionPane.showMessageDialog(this, "Bill Saved to Database & Printed as TXT File Successfully!", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            btnPrint.setEnabled(false); 
 
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Failed to save the bill to the Database! Check Database connection.", "Database Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
+        }
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
