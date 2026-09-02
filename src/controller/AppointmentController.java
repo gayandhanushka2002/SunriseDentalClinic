@@ -66,7 +66,7 @@ public class AppointmentController {
     private void sendConfirmationEmail(Patient patient, Appointment appt) {
         //  Gmail and, 2-Step Verification included App Password in here 
         final String senderEmail = "sunrisedentalclinic97@gmail.com"; 
-        final String senderPassword = "lvurzguijhtqcdkk"; 
+        final String senderPassword = "YOUR_APP_PASSWORD_HERE"; 
 
         // Email Settings
         Properties props = new Properties();
