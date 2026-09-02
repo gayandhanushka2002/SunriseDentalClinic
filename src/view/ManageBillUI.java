@@ -56,7 +56,6 @@ public class ManageBillUI extends javax.swing.JFrame {
         tableBills = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtTreatmentDesc = new javax.swing.JTextField();
         txtTreatmentFee = new javax.swing.JTextField();
         lblConsultationFee = new javax.swing.JLabel();
         lblTotalCost = new javax.swing.JLabel();
@@ -64,6 +63,7 @@ public class ManageBillUI extends javax.swing.JFrame {
         btnGenerate = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        cmbTreatment = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,7 +89,7 @@ public class ManageBillUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableBills);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Treatment Details (Optional) ");
+        jLabel2.setText("-- Select Treatment (Optional) --");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Treament Fee (Rs)");
@@ -122,6 +122,9 @@ public class ManageBillUI extends javax.swing.JFrame {
         btnBack.setForeground(new java.awt.Color(255, 255, 255));
         btnBack.setText("Back to Dashboard");
         btnBack.addActionListener(this::btnBackActionPerformed);
+
+        cmbTreatment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Treatment --", "Teeth Cleaning", "Tooth Extraction", "Root Canal Treatment", "Dental Filling", "Teeth Whitening" }));
+        cmbTreatment.addActionListener(this::cmbTreatmentActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -159,12 +162,12 @@ public class ManageBillUI extends javax.swing.JFrame {
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(41, 41, 41)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(18, 18, 18)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtTreatmentDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                                        .addComponent(txtTreatmentFee)))))))
+                                        .addComponent(txtTreatmentFee, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                                        .addComponent(cmbTreatment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -180,7 +183,7 @@ public class ManageBillUI extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtTreatmentDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbTreatment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -237,24 +240,29 @@ public class ManageBillUI extends javax.swing.JFrame {
     // Reset fields
     lblConsultationFee.setText("Consultation Fee: Rs. 0.00");
     lblTotalCost.setText("Total Cost: Rs. 0.00");
-    txtTreatmentDesc.setText("");
+    cmbTreatment.setSelectedIndex(0);
     txtTreatmentFee.setText("");
     btnPrint.setEnabled(false);
     selectedApptNo = "";
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
-        // TODO add your handling code here:
-        
-        if (selectedApptNo.isEmpty()) {
+      
+           if (selectedApptNo.isEmpty()) {
         javax.swing.JOptionPane.showMessageDialog(this, "Please select an appointment from the table first!", "Warning", javax.swing.JOptionPane.WARNING_MESSAGE);
         return;
     }
 
     currentTreatmentFee = 0.0;
-    currentTreatmentDesc = txtTreatmentDesc.getText().trim();
-    String feeText = txtTreatmentFee.getText().trim();
+    
+    // Dropdown get treatments:
+    if (cmbTreatment.getSelectedIndex() > 0) {
+        currentTreatmentDesc = cmbTreatment.getSelectedItem().toString();
+    } else {
+        currentTreatmentDesc = "";
+    }
 
+    String feeText = txtTreatmentFee.getText().trim();
     if (!feeText.isEmpty()) {
         try {
             currentTreatmentFee = Double.parseDouble(feeText);
@@ -352,6 +360,19 @@ public class ManageBillUI extends javax.swing.JFrame {
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Failed to save the bill to the Database! Check Database connection.", "Database Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
+        
+        if (isSaved) {
+        // selaect Treatment and ssve to Database 
+        if (currentTreatmentFee > 0) {
+            String treatmentId = "T" + (int)(Math.random() * 10000); 
+            String desc = currentTreatmentDesc.isEmpty() ? "General Treatment" : currentTreatmentDesc;
+            
+            // Treatment Model & DAO save to database and insert 
+            model.Treatment treatment = new model.Treatment(treatmentId, selectedApptNo, desc, currentTreatmentFee);
+            dao.TreatmentDAO treatmentDAO = new dao.TreatmentDAO();
+            treatmentDAO.insertTreatment(treatment);
+        }
+        }
     }//GEN-LAST:event_btnPrintActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -360,6 +381,33 @@ public class ManageBillUI extends javax.swing.JFrame {
         new MainDashboardUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void cmbTreatmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTreatmentActionPerformed
+        // TODO add your handling code here:
+        
+        int index = cmbTreatment.getSelectedIndex();
+    
+    switch (index) {
+        case 1: // Teeth Cleaning
+            txtTreatmentFee.setText("2500");
+            break;
+        case 2: // Tooth Extraction
+            txtTreatmentFee.setText("3500");
+            break;
+        case 3: // Root Canal Treatment
+            txtTreatmentFee.setText("8000");
+            break;
+        case 4: // Dental Filling
+            txtTreatmentFee.setText("3000");
+            break;
+        case 5: // Teeth Whitening
+            txtTreatmentFee.setText("5000");
+            break;
+        default:
+            txtTreatmentFee.setText("");
+            break;
+    }
+    }//GEN-LAST:event_cmbTreatmentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -391,6 +439,7 @@ public class ManageBillUI extends javax.swing.JFrame {
     private javax.swing.JButton btnGenerate;
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> cmbTreatment;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -400,7 +449,6 @@ public class ManageBillUI extends javax.swing.JFrame {
     private javax.swing.JLabel lblTotalCost;
     private javax.swing.JTable tableBills;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtTreatmentDesc;
     private javax.swing.JTextField txtTreatmentFee;
     // End of variables declaration//GEN-END:variables
 

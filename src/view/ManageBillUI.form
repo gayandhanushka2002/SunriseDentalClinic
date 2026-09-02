@@ -61,13 +61,13 @@
                               </Group>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel2" min="-2" pref="193" max="-2" attributes="0"/>
-                                      <Component id="jLabel3" alignment="0" min="-2" pref="172" max="-2" attributes="0"/>
+                                      <Component id="jLabel3" min="-2" pref="172" max="-2" attributes="0"/>
+                                      <Component id="jLabel2" min="-2" pref="216" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="txtTreatmentDesc" pref="270" max="32767" attributes="0"/>
-                                      <Component id="txtTreatmentFee" max="32767" attributes="0"/>
+                                      <Component id="txtTreatmentFee" pref="270" max="32767" attributes="0"/>
+                                      <Component id="cmbTreatment" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -92,7 +92,7 @@
               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtTreatmentDesc" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cmbTreatment" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -200,7 +200,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Treatment Details (Optional) "/>
+        <Property name="text" type="java.lang.String" value="-- Select Treatment (Optional) --"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
@@ -210,8 +210,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Treament Fee (Rs)"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtTreatmentDesc">
     </Component>
     <Component class="javax.swing.JTextField" name="txtTreatmentFee">
     </Component>
@@ -293,6 +291,26 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cmbTreatment">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="6">
+            <StringItem index="0" value="-- Select Treatment --"/>
+            <StringItem index="1" value="Teeth Cleaning"/>
+            <StringItem index="2" value="Tooth Extraction"/>
+            <StringItem index="3" value="Root Canal Treatment"/>
+            <StringItem index="4" value="Dental Filling"/>
+            <StringItem index="5" value="Teeth Whitening"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbTreatmentActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
