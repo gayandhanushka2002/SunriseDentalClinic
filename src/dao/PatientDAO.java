@@ -24,7 +24,7 @@ public class PatientDAO {
         
         try {
             // SQL query to insert patient data
-            String sql = "INSERT INTO patient (patient_id, name, address, contact_number) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO patient (patient_id, name, address, contact_number, email) VALUES (?, ?, ?, ?,?)";
             PreparedStatement pst = conn.prepareStatement(sql);
             
             // Set the patient details to the SQL query
@@ -32,6 +32,7 @@ public class PatientDAO {
             pst.setString(2, patient.getName());
             pst.setString(3, patient.getAddress());
             pst.setString(4, patient.getContactNumber());
+            pst.setString(5, patient.getEmail());
             
             // Execute the insert query
             int rowsAffected = pst.executeUpdate();
