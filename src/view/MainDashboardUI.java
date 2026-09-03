@@ -200,20 +200,14 @@ public class MainDashboardUI extends javax.swing.JFrame {
     private void btnHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelpActionPerformed
         // TODO add your handling code here:
         
-        displayHelpInformation();
+         // Dashboard Help Button Code
+        new HelpUI().setVisible(true);
+        this.dispose();
      
     }//GEN-LAST:event_btnHelpActionPerformed
 
     
-    private void displayHelpInformation() {
-        String helpText = "Sunrise Dental Clinic - System Guide\n\n"
-        + "1. Manage Appointments: Add, Update, or Search patient appointments.\n"
-        + "2. Billing: Enter Appointment No to calculate total fees and print bills.\n"
-        + "3. Reports: View financial reports securely.\n\n"
-        + "Contact the System Administrator for technical support.";
-        
-        javax.swing.JOptionPane.showMessageDialog(this, helpText, "Help & Instructions", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-    }
+    
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
         new controller.AuthenticationService().logout(); 
