@@ -168,6 +168,12 @@ public class ManageDentistsUI extends javax.swing.JFrame {
 
         try {
     double fee = Double.parseDouble(feeStr);
+    //  Negative value reject 
+           
+            if (!util.ValidationUtil.isValidAmount(fee)) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Consultation Fee cannot be a negative value!", "Invalid Amount", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return; // value is negative system block it
+            }
 
     boolean isSuccess = dentistController.addNewDentist(id, name, fee);
     if (isSuccess) {
