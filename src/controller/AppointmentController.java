@@ -45,7 +45,7 @@ public class AppointmentController {
             boolean isApptSaved = appointmentDAO.insertAppointment(appointment);
             
             if (isApptSaved) {
-                // 3. ADVANCED FEATURE: Send an SMS notification using Factory Pattern (Design Pattern Marks වලට මේක තියාගමු)
+                // 3. ADVANCED FEATURE: Send an SMS notification using Factory Pattern 
                 Notification smsAlert = NotificationFactory.createNotification("SMS");
                 smsAlert.send("Dear " + patient.getName() + ", your appointment (" + appointment.getAppointmentNo() + ") is successfully booked!");
                 
