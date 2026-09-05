@@ -1,4 +1,17 @@
-# 🦷 Sunrise Dental Clinic Management System
+<div align="center">
+  
+  <img src="<img width="2048" height="2048" alt="sunrise new logo" src="https://github.com/user-attachments/assets/69c60e9d-344b-496f-8358-5bb65c0f7ba0" />" alt="Sunrise Dental Clinic Logo" width="250" />
+  
+  <h1>Sunrise Dental Clinic Management System</h1>
+  
+  <p>An enterprise-grade, distributed Java desktop application built to manage the daily operations of the Sunrise Dental Clinic. This system features a robust 3-tier MVC architecture, advanced MySQL database integration, real-time SMTP email notifications, and automated PDF invoice generation.</p>
+  
+  <br>
+</div>
+
+<hr>
+
+#  Sunrise Dental Clinic Management System
 
 A comprehensive, automated software solution designed to streamline the daily operations of a modern dental facility, replacing traditional paper-based record-keeping.
 
