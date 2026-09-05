@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 04, 2026 at 05:25 PM
+-- Generation Time: Sep 05, 2026 at 07:25 AM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
 --
 
 INSERT INTO `staff` (`staff_id`, `username`, `password`) VALUES
-(1, 'staff1', 's123');
+(1, 'staff1', 'yVCZeqE+KPK5vPyVBKkAmQ==:Jp8HB9x3eXwvvRjp2Sn7BE+mDsT78kCnNDWhpgLuxa0=');
 
 -- --------------------------------------------------------
 
