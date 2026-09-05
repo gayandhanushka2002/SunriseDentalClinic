@@ -1,6 +1,6 @@
 <div align="center">
   
-  <img src="<img width="2048" height="2048" alt="sunrise new logo" src="https://github.com/user-attachments/assets/69c60e9d-344b-496f-8358-5bb65c0f7ba0" />" alt="Sunrise Dental Clinic Logo" width="250" />
+  <img src="https://github.com/user-attachments/assets/69c60e9d-344b-496f-8358-5bb65c0f7ba0" alt="Sunrise Dental Clinic Logo" width="250" />
   
   <h1>Sunrise Dental Clinic Management System</h1>
   
